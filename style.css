@@ -108,6 +108,7 @@ body {
 .highlight {
     background: linear-gradient(120deg, var(--accent-color) 0%, #6366f1 100%);
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
     display: inline-block;
 }
@@ -215,6 +216,31 @@ body {
     font-weight: 600;
     font-size: 0.85rem;
 }
+
+/* ... existing code ... */
+
+/* Item 4: Delivery Card (Replacing Stats) */
+.delivery-card {
+    grid-column: 3 / 4;
+    grid-row: 2 / 3;
+    padding: 0;
+    /* Remove padding to let image fill */
+    overflow: hidden;
+    background: #f1f5f9;
+}
+
+.delivery-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.delivery-card:hover .delivery-image {
+    transform: scale(1.1);
+}
+
+/* Remove old stats card styles if possible or just leave them unused/overwritten */
 
 .check-circle {
     width: 20px;
@@ -325,37 +351,86 @@ input::placeholder {
     grid-column: 3 / 4;
     grid-row: 2 / 3;
     justify-content: space-between;
+    background: white;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+}
+
+.stat-header {
+    margin-bottom: 1rem;
 }
 
 .stat-value {
-    font-size: 3rem;
+    font-size: 3.5rem;
     font-weight: 800;
-    color: var(--text-primary);
+    background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent-color) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
     line-height: 1;
+    margin-bottom: 0.25rem;
+    letter-spacing: -0.02em;
 }
 
 .stat-label {
-    font-size: 0.9rem;
+    font-size: 0.95rem;
     color: var(--text-secondary);
-    font-weight: 500;
+    font-weight: 600;
+    letter-spacing: 0.01em;
 }
 
 .stat-graph {
     display: flex;
-    gap: 6px;
+    gap: 8px;
     align-items: flex-end;
-    height: 50%;
+    height: 60%;
+    padding-top: 1rem;
 }
 
 .bar {
     flex: 1;
-    background: #e2e8f0;
-    border-radius: 4px;
-    transition: height 0.6s ease;
+    background: linear-gradient(to top, #e2e8f0 0%, #f1f5f9 100%);
+    border-radius: 6px 6px 4px 4px;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
 }
 
-.stat-card:hover .bar {
-    background: var(--accent-color);
+/* Active/Gradient state for bars */
+.bar::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to top, var(--accent-color), #60a5fa);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+.stat-card:hover .bar::after {
+    opacity: 1;
+}
+
+/* Staggered hover effect using nth-child */
+.stat-card:hover .bar:nth-child(1) {
+    transform: translateY(-2px);
+    transition-delay: 0ms;
+}
+
+.stat-card:hover .bar:nth-child(2) {
+    transform: translateY(-4px);
+    transition-delay: 50ms;
+}
+
+.stat-card:hover .bar:nth-child(3) {
+    transform: translateY(-6px);
+    transition-delay: 100ms;
+}
+
+.stat-card:hover .bar:nth-child(4) {
+    transform: translateY(-8px);
+    transition-delay: 150ms;
 }
 
 /* Item 5: Social Card */
@@ -386,7 +461,7 @@ input::placeholder {
     grid-row: 2 / 3;
 }
 
-.stat-card {
+.delivery-card {
     grid-row: 2 / 3;
 }
 
@@ -455,7 +530,7 @@ input::placeholder {
         grid-row: 2;
     }
 
-    .stat-card {
+    .delivery-card {
         grid-column: 1 / 2;
         grid-row: 3;
     }
@@ -481,7 +556,7 @@ input::placeholder {
     .hero-card,
     .visual-card,
     .action-card,
-    .stat-card,
+    .delivery-card,
     .social-card {
         grid-column: auto;
         grid-row: auto;
@@ -497,20 +572,35 @@ input::placeholder {
     .hero-card {
         text-align: left;
         align-items: flex-start;
-        padding: 2rem;
+        padding: 1.5rem;
+        /* Decreased from 2rem */
     }
 
-    .stat-card {
+    /* Reduce internal spacing for mobile */
+    .logo {
+        margin-bottom: 1rem;
+    }
+
+    .hero-title {
+        margin: 1rem 0;
+        font-size: 2.5rem;
+        /* Optionally slightly smaller font if needed, keeping default clamp for now */
+    }
+
+    .subtitle {
+        margin-top: 1rem;
+    }
+
+    .coming-soon-badge {
+        margin-bottom: 1rem;
+    }
+
+    .delivery-card {
         padding-bottom: 0;
         min-height: 220px;
     }
 
-    .stat-graph {
-        margin-top: auto;
-        height: 120px;
-        width: 100%;
-        padding-bottom: 0;
-    }
+    /* .stat-graph removed */
 
     .social-card {
         background: white;
@@ -535,6 +625,21 @@ input::placeholder {
         font-size: 0.9rem;
         flex: 1;
         min-width: 100px;
+    }
+
+    /* Adjust Payment Received pill for mobile */
+    .success-pill {
+        top: 10%;
+        right: 5%;
+        padding: 0.4rem 0.8rem;
+        font-size: 0.75rem;
+        width: auto;
+    }
+
+    .check-circle {
+        width: 16px;
+        height: 16px;
+        font-size: 0.6rem;
     }
 }
 
