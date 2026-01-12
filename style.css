@@ -598,6 +598,8 @@ input::placeholder {
     .delivery-card {
         padding-bottom: 0;
         min-height: 220px;
+        order: -1;
+        /* Display first on mobile */
     }
 
     /* .stat-graph removed */
